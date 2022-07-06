@@ -51,7 +51,7 @@ app.get("/help/*", (req, res) => {
 app.get("/weather", (req, res) => {
   if (!req.query.address) {
     return res.send({
-        error: "Address query not found"
+      error: "Address query not found",
     });
   }
 
@@ -61,20 +61,24 @@ app.get("/weather", (req, res) => {
   getWeatherForecast(lattitude, longitude, (error, { current } = {}) => {
     if (error) {
       return res.send({
-        error
-      })
-    } 
+        error,
+      });
+    }
 
-      const { weather_descriptions: weather, temperature, feelslike } = current;
-  
-      const forecast = `${weather[0]}. It is ${temperature} degrees out but feels like ${feelslike} degrees out`
-      
-      res.send({
-        forecast,
-        location: req.query.address
-      })
+    const {
+      weather_descriptions: weather,
+      temperature,
+      feelslike,
+      humidity,
+    } = current;
+
+    const forecast = `${weather[0]}. It is ${temperature} degrees out but feels like ${feelslike} degrees out.Humidity is ${humidity}`;
+
+    res.send({
+      forecast,
+      location: req.query.address,
+    });
   });
-
 });
 
 app.get("*", (req, res) => {
